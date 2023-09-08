@@ -1,0 +1,74 @@
+.articleListInner{
+    display: flex;
+    justify-content: space-between;
+    width: 58.625rem;
+}
+
+.titleContainer{
+}
+.titleText{
+    font-family: Inter;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.75rem;
+    color: #1890FF;
+}
+
+.titleInner{
+display: flex;
+align-items: center;
+gap: 0.81rem;
+}
+
+.likeBtnContainer{
+display: flex;
+gap: 0.2rem;
+font-family: Inter;
+font-size: 0.75rem;
+font-style: normal;
+font-weight: 400;
+line-height: 1.375rem;
+}
+
+.likeBtn{
+width: 1rem;
+height: 1rem;
+flex-shrink: 0;
+}
+
+.tagContainer{
+display: flex;
+gap: 0.5rem;
+font-family: Inter;
+font-size: 0.75rem;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+color: rgba(0, 0, 0, 0.50);
+}
+.tagsText{
+padding: 0.13rem;
+border-radius: 0.125rem;
+border: solid 1px rgba(0, 0, 0, 0.50);
+
+}
+
+.articleDescription{
+font-family: Inter;
+font-size: 0.75rem;
+font-style: normal;
+font-weight: 400;
+line-height: 1.375rem;
+color: rgba(0, 0, 0, 0.50);
+}
+
+.articleBody{
+font-family: Inter;
+font-size: 0.75rem;
+font-style: normal;
+font-weight: 400;
+line-height: 1.375rem;
+color: rgba(0, 0, 0, 0.75);
+margin-top: 1.56rem;
+}

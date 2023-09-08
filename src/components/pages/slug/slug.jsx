@@ -2,12 +2,14 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
 
 import { slugAxiox, setSlug } from '../../redux/reducers/slugAxios/slugAxios';
 import { storedUser } from '../../redux/actions/userActions/userActions';
 import { deletePost, setDeleteData } from '../../redux/reducers/deletePost/deletePost';
 import ArticleAuthor from '../articleAuthor/articleAuthor';
+import ArticleContent from '../../articleContent/articleContent';
+
+import Style from './slug.module.scss';
 
 const Slug = () => {
   const dispatch = useDispatch();
@@ -19,9 +21,14 @@ const Slug = () => {
   const [stored, setStored] = useState(storedUser);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  const { container } = Style;
+
+  const storedSlug = localStorage.getItem('slug');
+  const [currentSlug, setCurrentSlug] = useState(storedSlug || slug);
   useEffect(() => {
-    dispatch(slugAxiox({ slug: slug }));
-  }, [dispatch, slug]);
+    localStorage.setItem('slug', currentSlug);
+    dispatch(slugAxiox({ slug: currentSlug }));
+  }, [dispatch, currentSlug, slug]);
 
   const openDeleteModal = () => {
     setIsDeleteModalOpen(true);
@@ -46,7 +53,7 @@ const Slug = () => {
   }
 
   return (
-    <div>
+    <div className={container}>
       {stored.username === article.author.username ? (
         <>
           <button onClick={() => onClickArtickle(slug)}>TYT</button>
@@ -55,11 +62,7 @@ const Slug = () => {
           </button>
         </>
       ) : null}
-      <div>
-        <h1>{article.title}</h1>
-        <ArticleAuthor article={article} createdAt={article.createdAt} />
-      </div>
-      <ReactMarkdown>{article.body}</ReactMarkdown>
+      <ArticleContent article={article} />
       {isDeleteModalOpen && (
         <div className="modal">
           <div className="modal-content">
