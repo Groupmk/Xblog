@@ -2,10 +2,13 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 
 import { slugAxiox, setSlug } from '../../redux/reducers/slugAxios/slugAxios';
 import { storedUser } from '../../redux/actions/userActions/userActions';
 import { deletePost, setDeleteData } from '../../redux/reducers/deletePost/deletePost';
+import ArticleAuthor from '../articleAuthor/articleAuthor';
+
 const Slug = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -52,9 +55,11 @@ const Slug = () => {
           </button>
         </>
       ) : null}
-
-      <h1>{article.title}</h1>
-      <div>{article.body}</div>
+      <div>
+        <h1>{article.title}</h1>
+        <ArticleAuthor article={article} createdAt={article.createdAt} />
+      </div>
+      <ReactMarkdown>{article.body}</ReactMarkdown>
       {isDeleteModalOpen && (
         <div className="modal">
           <div className="modal-content">

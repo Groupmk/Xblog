@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Pagination } from 'antd';
-import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import _ from 'lodash';
 
@@ -36,6 +35,10 @@ const ArticleList = () => {
     authorContainer,
     articleBody,
     articleData,
+    titleText,
+    likeBtn,
+    likeBtnContainer,
+    tagsText,
   } = Style;
   const [likeClicked, setLikeClicked] = useState(false);
   const { user } = useSelector((state) => state.user);
@@ -52,10 +55,6 @@ const ArticleList = () => {
     dispatch(setPage(page));
     navigate(`/article/${page}`);
   };
-
-  function formatDate(date) {
-    return format(new Date(date), 'MMMM d, yyyy');
-  }
 
   const onClickArtickle = (slug) => {
     dispatch(setSlug(slug));
@@ -100,21 +99,25 @@ const ArticleList = () => {
               <div className={titleContainer}>
                 <div className={titleInner}>
                   <button onClick={() => onClickArtickle(article.slug)}>
-                    <div>article {article.title}</div>
+                    <div className={titleText}> {article.title} </div>
                   </button>
-                  <div>
-                    <button onClick={() => onLike(article.slug, article.favoritesCount)}>{likedFilter(article)}</button>
+                  <div className={likeBtnContainer}>
+                    <button onClick={() => onLike(article.slug, article.favoritesCount)} className={likeBtn}>
+                      {likedFilter(article)}
+                    </button>
                     {article.favoritesCount}
                   </div>
                 </div>
                 <div className={tagContainer}>
                   {article.tagList.map((tag, index) => (
-                    <div key={index}>{tag}</div>
+                    <div key={index} className={tagsText}>
+                      {tag}
+                    </div>
                   ))}
                 </div>
               </div>
               <div className={authorContainer}>
-                <ArticleAuthor createdAt={article.createdAt} article={article} formatDate={formatDate} />
+                <ArticleAuthor createdAt={article.createdAt} article={article} />
               </div>
             </div>
             <p className={articleBody}>{article.body}</p>
