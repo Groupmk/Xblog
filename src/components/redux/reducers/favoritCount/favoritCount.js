@@ -27,8 +27,7 @@ export const toggleLikeOnServer = createAsyncThunk(
 );
 
 const initialState = {
-  likes: [],
-  articles: [],
+  likes: null,
   error: null,
 };
 

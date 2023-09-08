@@ -9,6 +9,8 @@ import slugSlice from '../reducers/slugAxios/slugAxios';
 import favoriteSlice from '../reducers/favoritCount/favoritCount';
 import postSlice from '../reducers/createArticle/createArticle';
 import editSlise from '../reducers/editArticle/editArticle';
+import deleteSlise from '../reducers/deletePost/deletePost';
+import filterLikesSlice from '../reducers/filterLikes/filterLikes';
 
 const loggerMiddleware = (store) => (next) => (action) => {
   const result = next(action);
@@ -26,6 +28,8 @@ export const store = configureStore({
     likes: favoriteSlice,
     postCreate: postSlice,
     edit: editSlise,
+    deletePost: deleteSlise,
+    filterLikes: filterLikesSlice,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(loggerMiddleware),
 });

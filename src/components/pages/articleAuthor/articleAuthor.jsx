@@ -1,4 +1,8 @@
-const ArticleAuthor = ({ article }) => {
+/* eslint-disable no-unused-vars */
+import Style from './author.module.scss';
+
+const ArticleAuthor = ({ article, formatDate, createdAt }) => {
+  const { container, username, imageAuthor, articleData, userNameContaier } = Style;
   if (!article || !article.author) {
     return <p>No article available</p>;
   }
@@ -6,10 +10,12 @@ const ArticleAuthor = ({ article }) => {
   const { author } = article;
 
   return (
-    <div style={{ display: 'flex' }}>
-      <p>{author.username}</p>
-      <img src={author.image} alt={author.username} style={{ width: '50px' }} />
-      {/* <p>{author.following}</p> */}
+    <div className={container}>
+      <div className={userNameContaier}>
+        <p className={username}>{author.username}</p>
+        <div className={articleData}> {formatDate(createdAt)}</div>
+      </div>
+      <img src={author.image} alt={author.username} className={imageAuthor} />
     </div>
   );
 };

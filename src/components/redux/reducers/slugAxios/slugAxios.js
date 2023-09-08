@@ -1,10 +1,10 @@
+/* eslint-disable no-unused-vars */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 import { _Url } from '../../actions/userActions/userActions';
 
-export const slugAxiox = createAsyncThunk('slug/slugAxios', async (_, thunkAPI) => {
-  const { slug } = thunkAPI.getState().slug;
+export const slugAxiox = createAsyncThunk('slug/slugAxios', async ({ slug }, thunkAPI) => {
   try {
     const response = await axios.get(`${_Url}articles/${slug}`);
     return response.data;

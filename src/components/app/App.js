@@ -10,11 +10,13 @@ import UpdateUsers from '../pages/profile/userProfile';
 import { artcleAxios } from '../redux/reducers/articles/articles';
 import ArticleList from '../pages/articleList/articlelist';
 import CreateArticle from '../pages/createArticle/createArticle';
+import PollingComponent from '../polling/pollingComponents';
 import Slug from '../pages/slug/slug';
 
 function App() {
   const dispatch = useDispatch();
-  const { articlesArray, loading, error, page } = useSelector((state) => state.article);
+  const { articlesArray, loading, error, page, limit, offset } = useSelector((state) => state.article);
+  const { slugArray } = useSelector((state) => state.slug);
   const { likes } = useSelector((state) => state.likes);
   const { post } = useSelector((state) => state.postCreate);
   const { edit } = useSelector((state) => state.edit);
@@ -22,7 +24,7 @@ function App() {
 
   useEffect(() => {
     dispatch(artcleAxios());
-  }, [dispatch, page, likes, post, edit]);
+  }, [dispatch, page, likes, post, edit, slugArray]);
 
   if (!articlesArray) {
     if (!articlesArray) {
