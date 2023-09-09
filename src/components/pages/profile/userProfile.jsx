@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -7,13 +7,17 @@ import { useForm } from 'react-hook-form';
 import { updateUser, storedUser } from '../../redux/actions/userActions/userActions';
 import { setProfile } from '../../redux/reducers/profile/profile';
 import { clearUser } from '../../redux/reducers/userReduser/userReducer';
+import { artcleAxios } from '../../redux/reducers/articles/articles';
+
+import Style from './profile.module.scss';
 
 const UpdateUsers = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { updateProfile } = useSelector((state) => state.profile);
+  const { updateProfile, profile } = useSelector((state) => state.profile);
   const { user } = useSelector((state) => state.user);
   const stored = storedUser;
+  const { container, formText, errrConfirm, errr, submitBtn, footerText, logOut } = Style;
 
   const {
     register,
@@ -24,10 +28,26 @@ const UpdateUsers = () => {
     mode: 'onBlur',
   });
   const inputFields = [
-    { name: 'username', type: 'text', placeholder: 'Имя пользователя', minLength: 3, maxLength: 20 },
-    { name: 'email', type: 'email', placeholder: 'Email' },
-    { name: 'password', type: 'password', placeholder: 'Пароль', minLength: 3, maxLength: 40 },
-    { name: 'image', type: 'text', placeholder: 'Изображение URL' },
+    {
+      name: 'username',
+      type: 'text',
+      placeholder: 'Имя пользователя',
+      minLength: 3,
+      maxLength: 20,
+      className: 'username',
+      label: 'Username',
+    },
+    { name: 'email', type: 'email', placeholder: 'Email', className: 'email', label: 'Email address' },
+    {
+      name: 'password',
+      type: 'password',
+      placeholder: 'Пароль',
+      minLength: 3,
+      maxLength: 40,
+      className: 'password',
+      label: 'New password',
+    },
+    { name: 'image', type: 'text', placeholder: 'Изображение URL', className: 'image', label: 'Avatar image (url)' },
   ];
 
   const handleOnSubmit = (data) => {
@@ -46,19 +66,23 @@ const UpdateUsers = () => {
     localStorage.removeItem('user');
     if (user === null) {
       navigate('/');
-      window.location.reload();
     }
+    window.location.reload();
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit(handleOnSubmit)}>
-        {inputFields.map(({ name, type, placeholder, minLength, maxLength }) => (
-          <label key={name}>
+      <form onSubmit={handleSubmit(handleOnSubmit)} className={container}>
+        <h2 className={formText}>Edit Profile</h2>
+        {inputFields.map(({ name, type, placeholder, minLength, maxLength, label }) => (
+          <label key={name} htmlFor={name} className={Style.labelTextInput}>
+            {label && <span>{label}</span>}
             <input
               key={name}
               type={type}
+              id={name}
               name={name}
+              className={Style[name]}
               {...register(name, {
                 minLength: {
                   value: minLength,
@@ -71,14 +95,16 @@ const UpdateUsers = () => {
               })}
               placeholder={placeholder}
             />
-            {errors[name] && <p>{errors[name].message}</p>}
+            {errors[name] && <p className={errr}>{errors[name].message}</p>}
           </label>
         ))}
-        <button type="submit">update</button>
+        <button type="submit" className={submitBtn}>
+          Save
+        </button>
+        <button onClick={setClearUser} className={logOut}>
+          log out
+        </button>
       </form>
-      <button onClick={setClearUser} style={{ marginLeft: '10px' }}>
-        clear
-      </button>
     </>
   );
 };

@@ -6,63 +6,88 @@ import { useDispatch, useSelector } from 'react-redux';
 import Logo from '../assets/img/х.svg';
 import { storedUser } from '../redux/actions/userActions/userActions';
 import { postAxios } from '../redux/reducers/createArticle/createArticle';
-import { setSlug } from '../redux/reducers/slugAxios/slugAxios';
+import { clearUser } from '../redux/reducers/userReduser/userReducer';
+import { setSlug, setSlugArray } from '../redux/reducers/slugAxios/slugAxios';
 
 import Style from './header.module.scss';
+
 const Header = () => {
   const dispatch = useDispatch();
-  const { container, SignUp, SignUpBtn, X, XContainer } = Style;
-  const { updateProfile } = useSelector((state) => state.profile);
+  const {
+    container,
+    SignUp,
+    SignUpBtn,
+    X,
+    XContainer,
+    user,
+    userContainer,
+    userInfo,
+    logOut,
+    createArticle,
+    SignIn,
+    btnContainer,
+  } = Style;
+
+  const { updateProfile, profile } = useSelector((state) => state.profile);
   const { post } = useSelector((state) => state.postCreate);
-  const [stored, setStored] = useState(storedUser);
-  console.log(stored);
-  useEffect(() => {
-    setStored(storedUser);
-    if (storedUser && Object.keys(storedUser).length === 0) {
-      setStored(null);
-    }
-  }, [stored, updateProfile]);
+  const [jsxCode, setJsxCode] = useState(null);
+  const [localStorageUpdated, setLocalStorageUpdated] = useState(false);
 
   const onClickCareate = () => {
     dispatch(setSlug(''));
   };
 
+  const setClearUser = () => {
+    dispatch(clearUser());
+    localStorage.removeItem('user');
+    setLocalStorageUpdated(true);
+  };
+
+  useEffect(() => {
+    if (storedUser && storedUser.image) {
+      const imageUser = <img src={storedUser.image} alt="user" className={user} />;
+      const userName = <div>{storedUser.username}</div>;
+      setJsxCode(
+        <div className={userInfo}>
+          {userName} {imageUser}
+        </div>
+      );
+    } else if (storedUser === null || localStorageUpdated) {
+      setJsxCode(null);
+      setLocalStorageUpdated(false);
+    }
+  }, [storedUser, localStorageUpdated]);
+
   return (
     <>
       <div className={container}>
-        <div className={XContainer}>
+        <div className={XContainer} onClick={onClickCareate}>
           <Link to="/">
             <img src={Logo} alt="logo" className={X} />
           </Link>
         </div>
-        {stored && Object.keys(stored).length > 0 ? (
-          <button>
-            <Link to="/profile">
-              {stored && stored.image ? (
-                <img
-                  src={stored.image}
-                  alt="user"
-                  style={{ width: '2.875rem', height: '2.875rem', borderRadius: '50%' }}
-                />
-              ) : (
-                'user'
-              )}
-            </Link>
-          </button>
+        {storedUser && !localStorageUpdated ? (
+          <div className={userContainer}>
+            <button onClick={onClickCareate} className={createArticle}>
+              <Link to={'/create'}>createArticle</Link>
+            </button>
+            <button>
+              <Link to={'/profile'}>{jsxCode}</Link>
+            </button>
+            <button className={logOut} onClick={setClearUser}>
+              Log Out
+            </button>
+          </div>
         ) : (
-          <button>
-            <Link to={'/auntification'}>Sign In</Link>
-          </button>
+          <div className={btnContainer}>
+            <button className={SignIn}>
+              <Link to={'/auntification'}>Sign In</Link>
+            </button>
+            <button className={SignUpBtn}>
+              <Link to="/registration">Sign Up</Link>
+            </button>
+          </div>
         )}
-
-        <button className={SignUpBtn}>
-          <Link to="/registration" className={SignUp}>
-            Sign Up
-          </Link>
-        </button>
-        <button onClick={onClickCareate}>
-          <Link to={'/create'}>createArticle</Link>
-        </button>
       </div>
     </>
   );

@@ -1,13 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  user: {
-    username: '',
-    bio: 'I work at State Farm.',
-    email: '',
-    image: null,
-    following: false,
-  },
+  user: null,
   isLoading: false,
   error: null,
 };

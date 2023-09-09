@@ -11,6 +11,7 @@ import { toggleLikeOnServer } from '../redux/reducers/favoritCount/favoritCount'
 import { storedUser } from '../redux/actions/userActions/userActions';
 import { filterLikes } from '../redux/reducers/filterLikes/filterLikes';
 import ArticleAuthor from '../pages/articleAuthor/articleAuthor';
+import { storedSlug } from '../local-store/local-store';
 
 import Style from './articleContent.module.scss';
 
@@ -20,7 +21,6 @@ const ArticleContent = ({ article }) => {
   const { likes } = useSelector((state) => state.likes);
   const { slug } = useSelector((state) => state.slug);
   const { filterLikesArray } = useSelector((state) => state.filterLikes);
-  const storedSlug = localStorage.getItem('slug');
 
   const [stored, setStored] = useState(storedUser);
 
@@ -102,7 +102,7 @@ const ArticleContent = ({ article }) => {
         </div>
       </div>
       <p className={articleDescription}>{article.description}</p>
-      {article.slug === storedSlug ? <ReactMarkdown className={articleBody}>{article.body}</ReactMarkdown> : null}
+      {storedSlug ? <ReactMarkdown className={articleBody}>{article.body}</ReactMarkdown> : null}
     </div>
   );
 };

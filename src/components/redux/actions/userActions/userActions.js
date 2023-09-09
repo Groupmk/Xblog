@@ -44,8 +44,12 @@ export const updateUser = (userData) => async (dispatch) => {
     );
     const profile = response.data.user;
     dispatch(setProfile(profile));
-    const updatedUser = { ...storedUser, profile };
-    localStorage.setItem('user', JSON.stringify(updatedUser));
+    storedUser.image = profile.image;
+    storedUser.username = profile.username;
+    storedUser.email = profile.email;
+    storedUser.password = profile.password;
+    localStorage.setItem('user', JSON.stringify(storedUser));
+    console.log(profile);
   } catch (error) {
     dispatch(setError(error.message));
   }

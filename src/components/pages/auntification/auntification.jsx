@@ -1,16 +1,19 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import { authenticate } from '../../redux/actions/userActions/userActions';
+
+import Style from './aunification.module.scss';
 
 const Authentication = () => {
   const dispatch = useDispatch();
   const { loading, error, user } = useSelector((state) => state.user);
   const [redirectToLogin, setRedirectToLogin] = useState(false);
   const navigate = useNavigate();
+  const { container, formText, submitBtn, footerText, signUp, errorStyle } = Style;
 
   const {
     register,
@@ -22,41 +25,43 @@ const Authentication = () => {
   });
 
   const inputFields = [
-    { name: 'email', type: 'email', placeholder: 'Email' },
-    { name: 'password', type: 'password', placeholder: 'Пароль' },
+    { name: 'email', type: 'email', placeholder: 'Email', className: 'email', label: 'Email address' },
+    { name: 'password', type: 'password', placeholder: 'Пароль', className: 'password', label: 'Password' },
   ];
 
   const handleOneSubmit = (data) => {
     reset();
-    console.log(data);
     dispatch(authenticate(data));
-    setRedirectToLogin(true);
+    navigate('/');
   };
-  useEffect(() => {
-    if (redirectToLogin && user) {
-      navigate('/');
-    }
-  }, [redirectToLogin, user]);
   return (
     <div>
-      <h2>Аутентификация</h2>
       {error && <p>Ошибка аутентификации: {error}</p>}
-      <form onSubmit={handleSubmit(handleOneSubmit)}>
-        {inputFields.map(({ name, type, placeholder }) => (
-          <label key={name}>
+      <form onSubmit={handleSubmit(handleOneSubmit)} className={container}>
+        <p className={formText}>Sign In</p>
+        {inputFields.map(({ name, type, placeholder, label }) => (
+          <label htmlFor={name} key={name} className={Style.labelText}>
+            {label && <span>{label}</span>}
             <input
               key={name}
+              id={name}
               type={type}
               name={name}
-              {...register(name, { required: true })}
+              {...register(name)}
               placeholder={placeholder}
+              className={Style[name]}
             />
-            <div>{errors?.[name] && 'Поле обязательно'}</div>
           </label>
         ))}
-        <button type="submit" disabled={!isValid}>
-          {loading ? 'Загрузка...' : 'Войти'}
+        <button type="submit" disabled={!isValid} className={submitBtn}>
+          {loading ? 'Загрузка...' : 'Login'}
         </button>
+        <p className={footerText}>
+          Don’t have an account?{' '}
+          <Link to="/registration" className={signUp}>
+            Sign Up.
+          </Link>
+        </p>
       </form>
     </div>
   );

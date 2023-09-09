@@ -12,7 +12,6 @@ const CreateArticle = () => {
   const navigate = useNavigate();
   const { post } = useSelector((state) => state.postCreate);
   const { slug } = useSelector((state) => state.slug);
-  console.log(post);
 
   const [tags, setTags] = useState([]);
   const [newTag, setNewTag] = useState('');
@@ -31,7 +30,7 @@ const CreateArticle = () => {
       setNewTag('');
     }
   };
-  console.log(tags);
+
   const removeTag = (tag) => {
     const updatedTags = tags.filter((t) => t !== tag);
     setTags(updatedTags);

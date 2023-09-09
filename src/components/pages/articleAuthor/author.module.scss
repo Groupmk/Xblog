@@ -33,4 +33,18 @@
         align-items: center;
         margin-left: 1rem;
     }
+
+    .btnContainer{
+        display: flex;
+        gap: 0.85rem;
+        margin-top: 2.25rem;
+        .edit{
+        width: 4.5rem;
+        height: 2rem;
+        color: #52C41A;
+        border: solid 1px #52C41A;
+        font-size: 14px;
+        font-weight: 400;
+        }
+    }
 }

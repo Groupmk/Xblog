@@ -16,11 +16,6 @@ const Slug = () => {
   const navigate = useNavigate();
   const { slugArray, slug } = useSelector((state) => state.slug);
   const { article } = slugArray;
-  console.log(slug);
-
-  const [stored, setStored] = useState(storedUser);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
   const { container } = Style;
 
   const storedSlug = localStorage.getItem('slug');
@@ -30,48 +25,13 @@ const Slug = () => {
     dispatch(slugAxiox({ slug: currentSlug }));
   }, [dispatch, currentSlug, slug]);
 
-  const openDeleteModal = () => {
-    setIsDeleteModalOpen(true);
-  };
-
-  const closeDeleteModal = () => {
-    setIsDeleteModalOpen(false);
-  };
-
-  const onDeleteConfirmed = (slug) => {
-    dispatch(deletePost({ slug: slug }));
-    closeDeleteModal();
-  };
-
-  const onClickArtickle = (slug) => {
-    dispatch(setSlug(slug));
-    navigate(`/create/${slug}`);
-  };
-
   if (!article || !article.author) {
     return <p>No article available</p>;
   }
 
   return (
     <div className={container}>
-      {stored.username === article.author.username ? (
-        <>
-          <button onClick={() => onClickArtickle(slug)}>TYT</button>
-          <button onClick={openDeleteModal} style={{ marginLeft: '50px' }}>
-            Delete
-          </button>
-        </>
-      ) : null}
       <ArticleContent article={article} />
-      {isDeleteModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <p>Вы уверены, что хотите удалить эту статью?</p>
-            <button onClick={() => onDeleteConfirmed(slug)}>Да</button>
-            <button onClick={closeDeleteModal}>Нет</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

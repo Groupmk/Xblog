@@ -6,8 +6,6 @@ import { _Url, storedUser } from '../../actions/userActions/userActions';
 
 export const deletePost = createAsyncThunk('post/deletePost', async ({ slug }, thunkAPI) => {
   const { token } = storedUser;
-  console.log(slug);
-  console.log(token);
   try {
     thunkAPI.dispatch(setIsLoading(true));
     const response = await axios.delete(`${_Url}articles/${slug}`, {

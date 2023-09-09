@@ -28,6 +28,9 @@ const slugSlice = createSlice({
     setSlug: (state, action) => {
       state.slug = action.payload;
     },
+    setSlugArray: (state, action) => {
+      state.slugArray = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(slugAxiox.pending, (state) => {
@@ -45,5 +48,5 @@ const slugSlice = createSlice({
   },
 });
 
-export const { setSlug } = slugSlice.actions;
+export const { setSlug, setSlugArray } = slugSlice.actions;
 export default slugSlice.reducer;
