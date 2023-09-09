@@ -33,7 +33,7 @@ function App() {
     return () => {
       clearTimeout(fnTimeout);
     };
-  }, [page, likes, post, edit, storedUser, storedUser.image, storedUser.username]);
+  }, [page, likes, post, edit, storedUser, storedUser?.image, storedUser?.username]);
 
   if (!articlesArray) {
     if (!articlesArray) {

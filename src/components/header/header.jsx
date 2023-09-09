@@ -57,7 +57,7 @@ const Header = () => {
       setJsxCode(null);
       setLocalStorageUpdated(false);
     }
-  }, [storedUser, localStorageUpdated, storedUser.image]);
+  }, [storedUser, localStorageUpdated, storedUser?.image]);
 
   return (
     <>
