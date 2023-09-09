@@ -59,6 +59,7 @@ const UpdateUsers = () => {
       }
     }
     dispatch(updateUser(filteredData));
+    dispatch(artcleAxios());
   };
 
   const setClearUser = () => {

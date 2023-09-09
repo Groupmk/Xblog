@@ -15,7 +15,8 @@ import { storedSlug } from '../local-store/local-store';
 
 import Style from './articleContent.module.scss';
 
-const ArticleContent = ({ article }) => {
+const ArticleContent = (propse) => {
+  const { currentSlug, article } = propse;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { likes } = useSelector((state) => state.likes);
@@ -71,6 +72,20 @@ const ArticleContent = ({ article }) => {
       return <img src={heart_1} alt="heart" />;
     }
   };
+
+  const truncateDescription = (description, maxLength) => {
+    if (description.length > maxLength) {
+      return description.slice(0, maxLength) + '...';
+    }
+    return description;
+  };
+
+  // const storedSlug = localStorage.getItem('slug');
+  // const [currentSlug, setCurrentSlug] = useState(storedSlug || slug);
+  useEffect(() => {
+    dispatch(slugAxiox({ slug: currentSlug }));
+  }, [dispatch, currentSlug, slug, storedSlug]);
+  console.log(currentSlug);
   if (!article) {
     return <p>No article available</p>;
   }
@@ -101,8 +116,8 @@ const ArticleContent = ({ article }) => {
           <ArticleAuthor createdAt={article.createdAt} article={article} />
         </div>
       </div>
-      <p className={articleDescription}>{article.description}</p>
-      {storedSlug ? <ReactMarkdown className={articleBody}>{article.body}</ReactMarkdown> : null}
+      <p className={articleDescription}>{truncateDescription(article.description, 100)}</p>
+      {currentSlug ? <ReactMarkdown className={articleBody}>{article.body}</ReactMarkdown> : null}
     </div>
   );
 };

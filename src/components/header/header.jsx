@@ -35,6 +35,7 @@ const Header = () => {
 
   const onClickCareate = () => {
     dispatch(setSlug(''));
+    localStorage.removeItem('slug');
   };
 
   const setClearUser = () => {
@@ -56,7 +57,7 @@ const Header = () => {
       setJsxCode(null);
       setLocalStorageUpdated(false);
     }
-  }, [storedUser, localStorageUpdated]);
+  }, [storedUser, localStorageUpdated, storedUser.image]);
 
   return (
     <>
@@ -69,7 +70,7 @@ const Header = () => {
         {storedUser && !localStorageUpdated ? (
           <div className={userContainer}>
             <button onClick={onClickCareate} className={createArticle}>
-              <Link to={'/create'}>createArticle</Link>
+              <Link to={'/new-article'}>createArticle</Link>
             </button>
             <button>
               <Link to={'/profile'}>{jsxCode}</Link>

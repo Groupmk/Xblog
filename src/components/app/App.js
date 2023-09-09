@@ -26,13 +26,14 @@ function App() {
   const { deleteData } = useSelector((state) => state.deletePost);
 
   useEffect(() => {
+    localStorage.removeItem('slug');
     const fnTimeout = setTimeout(() => {
       dispatch(artcleAxios());
     }, 1000);
     return () => {
       clearTimeout(fnTimeout);
     };
-  }, [page, likes, post, edit, storedUser]);
+  }, [page, likes, post, edit, storedUser, storedUser.image, storedUser.username]);
 
   if (!articlesArray) {
     if (!articlesArray) {
@@ -51,7 +52,8 @@ function App() {
           <Route path="profile" element={<UpdateUsers />} />
           <Route path="articles/:slug" element={<Slug />} />
           <Route path="article/:page" element={<ArticleList />} />
-          <Route path="create" element={<CreateArticle />} />
+          <Route path="new-article" element={<CreateArticle />} />
+          <Route path="/articles/:slug/edit" element={<CreateArticle />} />
           <Route path="create/:slug" element={<CreateArticle />} />
           <Route index element={<ArticleList />} />
         </Route>

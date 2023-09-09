@@ -23,7 +23,7 @@ const Slug = () => {
   useEffect(() => {
     localStorage.setItem('slug', currentSlug);
     dispatch(slugAxiox({ slug: currentSlug }));
-  }, [dispatch, currentSlug, slug]);
+  }, [dispatch, currentSlug, slug, storedSlug]);
 
   if (!article || !article.author) {
     return <p>No article available</p>;
@@ -31,7 +31,7 @@ const Slug = () => {
 
   return (
     <div className={container}>
-      <ArticleContent article={article} />
+      <ArticleContent article={article} currentSlug={currentSlug} />
     </div>
   );
 };

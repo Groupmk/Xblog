@@ -42,14 +42,15 @@ const ArticleAuthor = ({ article, createdAt }) => {
   const onDeleteConfirmed = async () => {
     dispatch(setPost({}));
     await dispatch(deletePost({ slug: article.slug }));
-    closeDeleteModal();
     localStorage.removeItem('slug');
+    closeDeleteModal();
     navigate('/');
   };
 
   const onClickArticle = () => {
     dispatch(setSlug(article.slug));
-    navigate(`/create/${article.slug}`);
+    localStorage.removeItem('slug');
+    navigate(`/articles/${article.slug}/edit`);
   };
 
   function formatDate(date) {

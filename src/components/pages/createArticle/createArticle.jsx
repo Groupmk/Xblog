@@ -7,6 +7,8 @@ import { useForm } from 'react-hook-form';
 import { setPost, postAxios } from '../../redux/reducers/createArticle/createArticle';
 import { setEdit, editPost } from '../../redux/reducers/editArticle/editArticle';
 
+import Style from './createArticle.module.scss';
+
 const CreateArticle = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -15,6 +17,22 @@ const CreateArticle = () => {
 
   const [tags, setTags] = useState([]);
   const [newTag, setNewTag] = useState('');
+
+  const {
+    container,
+    tagsInput,
+    tagsText,
+    tagsBtn,
+    deleteTags,
+    submitBtn,
+    tagText,
+    titleForm,
+    footerText,
+    signUp,
+    lableTags,
+    tagsContainer,
+    tagsContent,
+  } = Style;
 
   const addTag = (tag) => {
     if (!tags.includes(tag)) {
@@ -36,6 +54,10 @@ const CreateArticle = () => {
     setTags(updatedTags);
   };
 
+  const removeAllTags = () => {
+    setTags([]);
+  };
+
   const {
     register,
     handleSubmit,
@@ -46,9 +68,19 @@ const CreateArticle = () => {
   });
 
   const inputFields = [
-    { name: 'title', type: 'text', placeholder: 'Заголовок' },
-    { name: 'description', type: 'text', placeholder: 'Описание' },
-    { name: 'body', type: 'text', placeholder: 'Текст' },
+    { name: 'title', type: 'text', placeholder: 'Заголовок', className: 'title', label: 'Title' },
+    {
+      name: 'description',
+      type: 'text',
+      placeholder: 'Описание',
+      className: 'description',
+      label: 'Short description',
+    },
+    {
+      name: 'body',
+      placeholder: 'Текст',
+      className: 'body',
+    },
   ];
 
   const onSubmit = (data) => {
@@ -67,34 +99,70 @@ const CreateArticle = () => {
     }
     reset();
     setTags([]);
+    navigate('/');
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {inputFields.map(({ name, type, placeholder }) => (
-        <label key={name}>
-          <input key={name} type={type} name={name} {...register(name, { required: true })} placeholder={placeholder} />
+    <form onSubmit={handleSubmit(onSubmit)} className={container}>
+      <h2 className={titleForm}>Create new article</h2>
+      {inputFields.map(({ name, type, placeholder, label }) => (
+        <label key={name} htmlFor={name} className={Style.labelText}>
+          {label && <span>{label}</span>}
+          {name === 'body' ? (
+            <textarea
+              key={name}
+              name={name}
+              id={name}
+              {...register(name, { required: true })}
+              placeholder={placeholder}
+              className={Style[name]}
+            />
+          ) : (
+            <input
+              key={name}
+              type={type}
+              name={name}
+              id={name}
+              {...register(name, { required: true })}
+              placeholder={placeholder}
+              className={Style[name]}
+            />
+          )}
         </label>
       ))}
+      <div className={tagsContainer}>
+        <div>
+          <p className={tagsText}>Tags</p>
+          {tags.map((tag) => (
+            <span key={tag} className={tagsContent}>
+              <div className={tagText}>{tag}</div>
+              <button type="button" onClick={() => removeTag(tag)} className={deleteTags}>
+                Удалить
+              </button>
+            </span>
+          ))}
+        </div>
 
-      <div>
-        <input name="tags" type="text" placeholder="Теги" onChange={handleTagChange} value={newTag} />
-        <button type="button" onClick={handleAddTag}>
-          add tags
-        </button>
+        <label className={lableTags}>
+          <input
+            name="tags"
+            type="text"
+            placeholder="Теги"
+            onChange={handleTagChange}
+            value={newTag}
+            className={tagsInput}
+          />
+          <button type="button" onClick={() => removeAllTags()} className={deleteTags}>
+            Удалить
+          </button>
+          <button type="button" onClick={handleAddTag} className={tagsBtn}>
+            add tags
+          </button>
+        </label>
       </div>
-      <div>
-        {tags.map((tag) => (
-          <span key={tag}>
-            {tag}
-            <button type="button" onClick={() => removeTag(tag)}>
-              Удалить
-            </button>
-          </span>
-        ))}
-      </div>
-
-      <button type="submit">Submit</button>
+      <button type="submit" className={submitBtn}>
+        Submit
+      </button>
     </form>
   );
 };
