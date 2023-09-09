@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import { setPost, postAxios } from '../../redux/reducers/createArticle/createArticle';
 import { setEdit, editPost } from '../../redux/reducers/editArticle/editArticle';
+import { artcleAxios } from '../../redux/reducers/articles/articles';
 
 import Style from './createArticle.module.scss';
 
