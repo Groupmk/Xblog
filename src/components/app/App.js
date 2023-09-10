@@ -10,7 +10,6 @@ import UpdateUsers from '../pages/profile/userProfile';
 import { artcleAxios } from '../redux/reducers/articles/articles';
 import ArticleList from '../pages/articleList/articlelist';
 import CreateArticle from '../pages/createArticle/createArticle';
-import PollingComponent from '../polling/pollingComponents';
 import { storedSlug } from '../local-store/local-store';
 import { storedUser, userProfile } from '../redux/actions/userActions/userActions';
 import { setSlug } from '../redux/reducers/slugAxios/slugAxios';
