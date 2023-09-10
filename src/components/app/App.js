@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -12,11 +12,13 @@ import ArticleList from '../pages/articleList/articlelist';
 import CreateArticle from '../pages/createArticle/createArticle';
 import PollingComponent from '../polling/pollingComponents';
 import { storedSlug } from '../local-store/local-store';
-import { storedUser } from '../redux/actions/userActions/userActions';
+import { storedUser, userProfile } from '../redux/actions/userActions/userActions';
+import { setSlug } from '../redux/reducers/slugAxios/slugAxios';
 import Slug from '../pages/slug/slug';
 
 function App() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { articlesArray, loading, error, page, limit, offset } = useSelector((state) => state.article);
   const { slugArray, slug } = useSelector((state) => state.slug);
   const { likes } = useSelector((state) => state.likes);
@@ -35,6 +37,10 @@ function App() {
     };
   }, [page, likes, post, edit, storedUser, storedUser?.image, storedUser?.username]);
 
+  useEffect(() => {
+    userProfile();
+  }, []);
+
   if (!articlesArray) {
     if (!articlesArray) {
       return loading ? <div>Loading...</div> : null;
@@ -44,21 +50,22 @@ function App() {
     return <div>Error</div>;
   }
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route path="registration" element={<RegistrationForm />} />
-          <Route path="auntification" element={<Auntification />} />
-          <Route path="profile" element={<UpdateUsers />} />
-          <Route path="articles/:slug" element={<Slug />} />
-          <Route path="article/:page" element={<ArticleList />} />
-          <Route path="new-article" element={<CreateArticle />} />
-          <Route path="/articles/:slug/edit" element={<CreateArticle />} />
-          <Route path="create/:slug" element={<CreateArticle />} />
-          <Route index element={<ArticleList />} />
-        </Route>
-      </Routes>
-    </>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route path="registration" element={<RegistrationForm />} />
+        <Route path="auntification" element={<Auntification />} />
+        <Route path="articles/:slug" element={<Slug />} />
+        <Route path="article/:page" element={<ArticleList />} />
+        <Route path="profile" element={storedUser?.username ? <UpdateUsers /> : <Auntification to="/login" />} />
+        <Route path="new-article" element={storedUser?.username ? <CreateArticle /> : <Auntification to="/login" />} />
+        <Route
+          path="/articles/:slug/edit"
+          element={storedUser?.username ? <CreateArticle /> : <Auntification to="/login" />}
+        />
+        <Route path="create/:slug" element={storedUser?.username ? <CreateArticle /> : <Auntification to="/login" />} />
+        <Route index element={<ArticleList />} />
+      </Route>
+    </Routes>
   );
 }
 

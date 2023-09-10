@@ -80,12 +80,10 @@ const ArticleContent = (propse) => {
     return description;
   };
 
-  // const storedSlug = localStorage.getItem('slug');
-  // const [currentSlug, setCurrentSlug] = useState(storedSlug || slug);
-  useEffect(() => {
-    dispatch(slugAxiox({ slug: currentSlug }));
-  }, [dispatch, currentSlug, slug, storedSlug]);
-  console.log(currentSlug);
+  // useEffect(() => {
+  //   dispatch(slugAxiox({ slug: currentSlug }));
+  // }, [dispatch, currentSlug, slug, storedSlug]);
+
   if (!article) {
     return <p>No article available</p>;
   }
