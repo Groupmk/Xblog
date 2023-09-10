@@ -24,12 +24,28 @@ export const authenticate = (userData) => async (dispatch) => {
     localStorage.setItem('user', JSON.stringify(user));
     dispatch(registerSuccess(user));
     dispatch(setProfile(user));
-    window.location.reload();
+    dispatch(userProfile());
   } catch (error) {
     dispatch(setError(error.message));
   }
 };
 export const storedUser = JSON.parse(localStorage.getItem('user'));
+
+export const userProfile = () => async (dispatch) => {
+  const token = storedUser ? storedUser.token : '';
+  try {
+    const response = await axios.get(`${_Url}user`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    dispatch(setProfile(response.data.user));
+    return response;
+  } catch (error) {
+    dispatch(setError(error.message));
+  }
+};
+
 export const updateUser = (userData) => async (dispatch) => {
   const token = storedUser ? storedUser.token : '';
   try {

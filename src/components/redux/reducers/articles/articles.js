@@ -11,7 +11,7 @@ export const artcleAxios = createAsyncThunk('article/articleAxios', async (_, th
   } catch (error) {
     console.log(error);
     throw error;
-  }
+  }z
 });
 
 const initialState = {

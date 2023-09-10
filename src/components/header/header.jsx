@@ -8,7 +8,6 @@ import { storedUser } from '../redux/actions/userActions/userActions';
 import { postAxios } from '../redux/reducers/createArticle/createArticle';
 import { clearUser } from '../redux/reducers/userReduser/userReducer';
 import { setSlug, setSlugArray } from '../redux/reducers/slugAxios/slugAxios';
-import defaultImg from '../assets/img/Rectangle 1.png';
 
 import Style from './header.module.scss';
 
@@ -34,8 +33,6 @@ const Header = () => {
   const [jsxCode, setJsxCode] = useState(null);
   const [localStorageUpdated, setLocalStorageUpdated] = useState(false);
 
-  console.log(defaultImg);
-
   const onClickCareate = () => {
     dispatch(setSlug(''));
     localStorage.removeItem('slug');
@@ -48,13 +45,8 @@ const Header = () => {
   };
 
   useEffect(() => {
-    if (storedUser && (storedUser.image || defaultImg)) {
-      const imageUser = storedUser.image ? (
-        <img src={storedUser.image} alt="user" className={user} />
-      ) : (
-        <img src={defaultImg} alt="user" className={user} />
-      );
-
+    if (storedUser && storedUser.image) {
+      const imageUser = <img src={storedUser.image} alt="user" className={user} />;
       const userName = <div>{storedUser.username}</div>;
       setJsxCode(
         <div className={userInfo}>
