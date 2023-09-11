@@ -59,7 +59,6 @@ const UpdateUsers = () => {
       }
     }
     dispatch(updateUser(filteredData));
-    dispatch(artcleAxios());
   };
 
   const setClearUser = () => {
@@ -68,7 +67,6 @@ const UpdateUsers = () => {
     if (user === null) {
       navigate('/');
     }
-    window.location.reload();
   };
 
   return (

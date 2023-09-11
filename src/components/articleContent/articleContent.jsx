@@ -11,12 +11,14 @@ import { toggleLikeOnServer } from '../redux/reducers/favoritCount/favoritCount'
 import { storedUser } from '../redux/actions/userActions/userActions';
 import { filterLikes } from '../redux/reducers/filterLikes/filterLikes';
 import ArticleAuthor from '../pages/articleAuthor/articleAuthor';
-import { storedSlug } from '../local-store/local-store';
+import { authorFilter } from '../redux/reducers/filterUserProfile/filterUserProfile';
+import Loader from '../ui/loading/spin';
+import Hello from '../ui/helloMessage/helloMessage';
 
 import Style from './articleContent.module.scss';
 
 const ArticleContent = (propse) => {
-  const { currentSlug, article } = propse;
+  const { currentSlug, article, loading, error } = propse;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { likes } = useSelector((state) => state.likes);
@@ -26,7 +28,7 @@ const ArticleContent = (propse) => {
   const [stored, setStored] = useState(storedUser);
 
   const [likeClicked, setLikeClicked] = useState(false);
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.auentification);
 
   const {
     articleListInner,
@@ -45,16 +47,17 @@ const ArticleContent = (propse) => {
 
   useEffect(() => {
     dispatch(filterLikes());
-  }, [likes]);
+  }, [likes, article, dispatch, user]);
 
   const onClickArtickle = (slug) => {
     localStorage.setItem('slug', slug);
     dispatch(setSlug(slug));
+    dispatch(authorFilter());
     navigate(`/articles/${slug}`);
   };
 
   const onLike = (slug, likes) => {
-    if (!stored || !Object.keys(stored).length > 0) {
+    if (!user?.username) {
       setLikeClicked(likeClicked);
       return null;
     }
@@ -85,7 +88,7 @@ const ArticleContent = (propse) => {
   // }, [dispatch, currentSlug, slug, storedSlug]);
 
   if (!article) {
-    return <p>No article available</p>;
+    return <Loader />;
   }
   return (
     <div>

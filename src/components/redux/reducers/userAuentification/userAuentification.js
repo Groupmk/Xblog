@@ -9,7 +9,7 @@ const initialState = {
 };
 
 const auentificationSlise = createSlice({
-  name: 'auentification',
+  name: 'log',
   initialState,
   reducers: {
     setLoading: (state) => {

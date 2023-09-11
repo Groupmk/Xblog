@@ -6,11 +6,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setSlug, slugAxiox } from '../redux/reducers/slugAxios/slugAxios';
 import Header from '../header/header';
 import { storedSlug } from '../local-store/local-store';
+import Loader from '../../components/ui/loading/spin';
 
 import Style from './layout.module.scss';
 const Layout = () => {
   const dispatch = useDispatch();
   const { slug } = useParams();
+  const { articlesArray, loading, error, page, limit, offset } = useSelector((state) => state.article);
   const { slugArray } = useSelector((state) => state.slug);
   const { container } = Style;
 
@@ -55,9 +57,13 @@ const Layout = () => {
   return (
     <>
       <Header />
-      <main className={container} id="main">
-        <Outlet />
-      </main>
+      {loading ? (
+        <Loader />
+      ) : (
+        <main className={container} id="main">
+          <Outlet />
+        </main>
+      )}
       <footer>###</footer>
     </>
   );

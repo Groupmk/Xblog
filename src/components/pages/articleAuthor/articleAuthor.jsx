@@ -3,7 +3,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { Button, message, Popconfirm } from 'antd';
 
 import { setSlug, setSlugArray } from '../../redux/reducers/slugAxios/slugAxios';
@@ -12,13 +12,14 @@ import { deletePost } from '../../redux/reducers/deletePost/deletePost';
 import { storedSlug } from '../../local-store/local-store';
 import { artcleAxios } from '../../redux/reducers/articles/articles';
 import { setPost } from '../../redux/reducers/createArticle/createArticle';
+import { authorFilter } from '../../redux/reducers/filterUserProfile/filterUserProfile';
 
 import Style from './author.module.scss';
 
 const ArticleAuthor = ({ article, createdAt }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { slug, slugArray } = useSelector((state) => state.slug);
+  // const { slug, slugArray } = useSelector((state) => state.slug);
   const [stored, setStored] = useState(storedUser);
   const [jsxCode, setJsxCode] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -50,20 +51,24 @@ const ArticleAuthor = ({ article, createdAt }) => {
   const onClickArticle = () => {
     dispatch(setSlug(article.slug));
     localStorage.removeItem('slug');
+    dispatch(authorFilter());
     navigate(`/articles/${article.slug}/edit`);
   };
 
   function formatDate(date) {
     return format(new Date(date), 'MMMM d, yyyy');
   }
+  const { slug } = useParams();
+  const { author } = useSelector((state) => state.author);
+  const articles = author?.articles;
 
-  if (!article) {
-    return <p>No article available</p>;
-  }
+  const firstArticle = articles && articles.length > 0 ? articles[0] : {};
+
+  console.log(firstArticle);
 
   useEffect(() => {
     const storedSlug = localStorage.getItem('slug');
-    if (slug && storedSlug === article.slug) {
+    if (slug && firstArticle && firstArticle.slug === article.slug) {
       if (stored && stored?.username === article.author?.username) {
         const popconfirm = (
           <Popconfirm
@@ -96,7 +101,7 @@ const ArticleAuthor = ({ article, createdAt }) => {
     } else {
       setJsxCode(null);
     }
-  }, [slug, storedSlug, article.slug]);
+  }, [slug, storedSlug, article.slug, firstArticle]);
 
   return (
     <div className={container}>

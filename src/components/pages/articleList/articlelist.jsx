@@ -7,15 +7,17 @@ import _ from 'lodash';
 
 import { setOffset, setPage, artcleAxios } from '../../redux/reducers/articles/articles';
 import ArticleContent from '../../articleContent/articleContent';
+import Loader from '../../ui/loading/spin';
+import Hello from '../../ui/helloMessage/helloMessage';
 
-import ArticleAuthor from './../articleAuthor/articleAuthor';
 import Style from './articlelist.module.scss';
 
 const ArticleList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { articlesArray, limit, page, offset } = useSelector((state) => state.article);
+  const { articlesArray, limit, page, offset, loading, error } = useSelector((state) => state.article);
   const { articlesCount, articles } = articlesArray;
+  const { user } = useSelector((state) => state.auentification);
 
   const { container, articleList } = Style;
 
@@ -29,16 +31,17 @@ const ArticleList = () => {
   };
 
   if (!articles || !articles.length) {
-    return <p>No article available</p>;
+    return <Loader />;
   }
 
   const totalCount = Math.ceil(articlesCount / articles.length);
 
   return (
     <div className={container}>
+      {user?.username && !error && !loading && <Hello username={user?.username} />}
       {articles.map((article, index) => (
         <div key={index} className={articleList}>
-          <ArticleContent article={article} />
+          <ArticleContent article={article} loading={loading} error={error} />
         </div>
       ))}
       <Pagination defaultCurrent={1} current={page} total={totalCount} onChange={hendleOnPageChange} />

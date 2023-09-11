@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import { setPost, postAxios } from '../../redux/reducers/createArticle/createArticle';
 import { setEdit, editPost } from '../../redux/reducers/editArticle/editArticle';
-import { artcleAxios } from '../../redux/reducers/articles/articles';
+import { authorFilter, setAuthor } from '../../redux/reducers/filterUserProfile/filterUserProfile';
 
 import Style from './createArticle.module.scss';
 
@@ -15,34 +15,63 @@ const CreateArticle = () => {
   const navigate = useNavigate();
   const { post } = useSelector((state) => state.postCreate);
   const { slug } = useSelector((state) => state.slug);
+  const { author } = useSelector((state) => state.author);
+  const articles = author?.articles;
 
+  const firstArticle = articles && articles.length > 0 ? articles[0] : {};
+
+  const [articleData, setArticleData] = useState({
+    title: firstArticle?.title || '',
+    description: firstArticle?.description || '',
+    body: firstArticle?.body || '',
+  });
+
+  console.log(articleData);
   const [tags, setTags] = useState([]);
   const [newTag, setNewTag] = useState('');
 
-  const {
-    container,
-    tagsInput,
-    tagsText,
-    tagsBtn,
-    deleteTags,
-    submitBtn,
-    tagText,
-    titleForm,
-    footerText,
-    signUp,
-    lableTags,
-    tagsContainer,
-    tagsContent,
-  } = Style;
+  useEffect(() => {
+    if (author && slug) {
+      setArticleData({
+        title: firstArticle?.title || '',
+        description: firstArticle?.description || '',
+        body: firstArticle?.body || '',
+      });
+      setTags(firstArticle?.tagList || []);
+    }
+  }, [author, slug]);
+
+  const onSubmit = (data) => {
+    const updatedArticleData = {
+      title: data.title || 'string',
+      description: data.description || 'string',
+      body: data.body || 'string',
+      tagList: [...tags],
+    };
+
+    if (slug) {
+      dispatch(setEdit(updatedArticleData));
+      dispatch(editPost({ slug: slug, articleData: updatedArticleData }));
+    } else {
+      dispatch(setPost(updatedArticleData));
+      dispatch(postAxios(updatedArticleData));
+    }
+    dispatch(setAuthor({}));
+    reset();
+    setTags([]);
+    navigate('/');
+  };
 
   const addTag = (tag) => {
     if (!tags.includes(tag)) {
       setTags([...tags, tag]);
     }
   };
+
   const handleTagChange = (e) => {
     setNewTag(e.target.value);
   };
+
   const handleAddTag = () => {
     if (newTag.trim() !== '') {
       addTag(newTag);
@@ -58,6 +87,20 @@ const CreateArticle = () => {
   const removeAllTags = () => {
     setTags([]);
   };
+
+  const {
+    container,
+    tagsInput,
+    tagsText,
+    tagsBtn,
+    deleteTags,
+    submitBtn,
+    tagText,
+    titleForm,
+    lableTags,
+    tagsContainer,
+    tagsContent,
+  } = Style;
 
   const {
     register,
@@ -84,25 +127,6 @@ const CreateArticle = () => {
     },
   ];
 
-  const onSubmit = (data) => {
-    const articleData = {
-      title: data.title || 'string',
-      description: data.description || 'string',
-      body: data.body || 'string',
-      tagList: [...tags],
-    };
-    if (slug) {
-      dispatch(setEdit(articleData));
-      dispatch(editPost({ slug: slug, articleData: articleData }));
-    } else {
-      dispatch(setPost(articleData));
-      dispatch(postAxios(articleData));
-    }
-    reset();
-    setTags([]);
-    navigate('/');
-  };
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={container}>
       <h2 className={titleForm}>Create new article</h2>
@@ -117,6 +141,13 @@ const CreateArticle = () => {
               {...register(name, { required: true })}
               placeholder={placeholder}
               className={Style[name]}
+              value={articleData[name]}
+              onChange={(e) =>
+                setArticleData({
+                  ...articleData,
+                  [name]: e.target.value,
+                })
+              }
             />
           ) : (
             <input
@@ -127,6 +158,13 @@ const CreateArticle = () => {
               {...register(name, { required: true })}
               placeholder={placeholder}
               className={Style[name]}
+              value={articleData[name]}
+              onChange={(e) =>
+                setArticleData({
+                  ...articleData,
+                  [name]: e.target.value,
+                })
+              }
             />
           )}
         </label>

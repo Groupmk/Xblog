@@ -10,10 +10,10 @@ import UpdateUsers from '../pages/profile/userProfile';
 import { artcleAxios } from '../redux/reducers/articles/articles';
 import ArticleList from '../pages/articleList/articlelist';
 import CreateArticle from '../pages/createArticle/createArticle';
-import { storedSlug } from '../local-store/local-store';
+import Loader from '../ui/loading/spin';
 import { storedUser, userProfile } from '../redux/actions/userActions/userActions';
-import { setSlug } from '../redux/reducers/slugAxios/slugAxios';
 import Slug from '../pages/slug/slug';
+import { MyContextProvider } from '../context/userContext';
 
 function App() {
   const dispatch = useDispatch();
@@ -35,36 +35,47 @@ function App() {
       clearTimeout(fnTimeout);
     };
   }, [page, likes, post, edit, storedUser, storedUser?.image, storedUser?.username]);
+  console.log(storedUser);
+
+  const UserProfileData = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     userProfile();
   }, []);
 
-  if (!articlesArray) {
-    if (!articlesArray) {
-      return loading ? <div>Loading...</div> : null;
-    }
-  }
-  if (error) {
-    return <div>Error</div>;
-  }
+  // if (!articlesArray) {
+  //   if (!articlesArray) {
+  //     return loading ? <Loader /> : null;
+  //   }
+  // }
+  // if (error) {
+  //   return <div>Error</div>;
+  // }
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route path="registration" element={<RegistrationForm />} />
-        <Route path="auntification" element={<Auntification />} />
-        <Route path="articles/:slug" element={<Slug />} />
-        <Route path="article/:page" element={<ArticleList />} />
-        <Route path="profile" element={storedUser?.username ? <UpdateUsers /> : <Auntification to="/login" />} />
-        <Route path="new-article" element={storedUser?.username ? <CreateArticle /> : <Auntification to="/login" />} />
-        <Route
-          path="/articles/:slug/edit"
-          element={storedUser?.username ? <CreateArticle /> : <Auntification to="/login" />}
-        />
-        <Route path="create/:slug" element={storedUser?.username ? <CreateArticle /> : <Auntification to="/login" />} />
-        <Route index element={<ArticleList />} />
-      </Route>
-    </Routes>
+    <MyContextProvider>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="registration" element={<RegistrationForm />} />
+          <Route path="auntification" element={<Auntification />} />
+          <Route path="articles/:slug" element={<Slug />} />
+          <Route path="article/:page" element={<ArticleList />} />
+          <Route path="profile" element={UserProfileData?.username ? <UpdateUsers /> : <Auntification to="/login" />} />
+          <Route
+            path="new-article"
+            element={UserProfileData?.username ? <CreateArticle /> : <Auntification to="/login" />}
+          />
+          <Route
+            path="/articles/:slug/edit"
+            element={UserProfileData?.username ? <CreateArticle /> : <Auntification to="/login" />}
+          />
+          <Route
+            path="create/:slug"
+            element={UserProfileData?.username ? <CreateArticle /> : <Auntification to="/login" />}
+          />
+          <Route index element={<ArticleList />} />
+        </Route>
+      </Routes>
+    </MyContextProvider>
   );
 }
 

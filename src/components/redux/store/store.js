@@ -11,6 +11,7 @@ import postSlice from '../reducers/createArticle/createArticle';
 import editSlise from '../reducers/editArticle/editArticle';
 import deleteSlise from '../reducers/deletePost/deletePost';
 import filterLikesSlice from '../reducers/filterLikes/filterLikes';
+import authorFilterSlice from '../reducers/filterUserProfile/filterUserProfile';
 
 const loggerMiddleware = (store) => (next) => (action) => {
   const result = next(action);
@@ -30,6 +31,7 @@ export const store = configureStore({
     edit: editSlise,
     deletePost: deleteSlise,
     filterLikes: filterLikesSlice,
+    author: authorFilterSlice,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(loggerMiddleware),
 });

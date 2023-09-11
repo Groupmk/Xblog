@@ -25,10 +25,6 @@ const Slug = () => {
     dispatch(slugAxiox({ slug: currentSlug }));
   }, [dispatch, currentSlug, slug, storedSlug]);
 
-  if (!article || !article.author) {
-    return <p>No article available</p>;
-  }
-
   return (
     <div className={container}>
       <ArticleContent article={article} currentSlug={currentSlug} />
