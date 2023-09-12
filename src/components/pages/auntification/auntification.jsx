@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
@@ -10,12 +11,14 @@ import Style from './aunification.module.scss';
 
 const Authentication = () => {
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.user);
+  const { error } = useSelector((state) => state.auentification);
+  const { user } = useSelector((state) => state.auentification);
   const navigate = useNavigate();
-  const { container, formText, submitBtn, footerText, signUp } = Style;
+  const { container, formText, submitBtn, footerText, signUp, errr } = Style;
   const [articleData, setArticleData] = useState({
     email: '',
   });
+  const [redirectToLogin, setRedirectToLogin] = useState(false);
 
   useEffect(() => {
     const fetchStoredEmail = async () => {
@@ -45,18 +48,25 @@ const Authentication = () => {
     { name: 'password', type: 'password', placeholder: 'Пароль', className: 'password', label: 'Password' },
   ];
 
-  const handleOneSubmit = () => {
+  const handleOneSubmit = async () => {
     localStorage.setItem('mail', JSON.stringify(articleData.email));
     dispatch(authenticate({ ...articleData }));
     dispatch(setFlag(true));
     reset();
-    navigate('/');
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    error !== null && setRedirectToLogin(true);
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user]);
 
   return (
     <div>
-      {error && <p>Ошибка аутентификации: {error}</p>}
       <form onSubmit={handleSubmit(handleOneSubmit)} className={container}>
+        {error && <p className={errr}>Ошибка аутентификации</p>}
         <p className={formText}>Sign In</p>
         {inputFields.map(({ name, type, placeholder, label }) => (
           <label htmlFor={name} key={name} className={Style.labelText}>
@@ -80,7 +90,7 @@ const Authentication = () => {
           </label>
         ))}
         <button type="submit" disabled={!isValid} className={submitBtn}>
-          {loading ? 'Загрузка...' : 'Login'}
+          Login
         </button>
         <p className={footerText}>
           Don’t have an account?{' '}

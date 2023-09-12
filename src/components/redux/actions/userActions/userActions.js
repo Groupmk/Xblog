@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { setLoading, setError, registerSuccess } from '../../reducers/userReduser/userReducer';
 import { setProfile } from '../../reducers/profile/profile';
-import { setUser } from '../../reducers/userAuentification/userAuentification';
+import { setUser, setErrors } from '../../reducers/userAuentification/userAuentification';
 
 export const _Url = 'https://blog.kata.academy/api/';
 
@@ -25,13 +25,13 @@ export const authenticate = (userData) => async (dispatch) => {
     const user = response.data.user;
     localStorage.setItem('user', JSON.stringify(user));
     localStorage.setItem('mail', JSON.stringify(userData.email));
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     dispatch(setUser(user));
     dispatch(setProfile(user));
     dispatch(userProfile(user.token));
     storedUser = JSON.parse(localStorage.getItem('user'));
   } catch (error) {
-    dispatch(setError(error.message));
+    dispatch(setErrors(error.message));
   }
 };
 export let storedUser = JSON.parse(localStorage.getItem('user'));

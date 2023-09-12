@@ -11,11 +11,11 @@ import Style from './registration.module.scss';
 
 const RegistrationForm = () => {
   const dispatch = useDispatch();
-  const { user, error } = useSelector((state) => state.auentification);
-  const [redirectToLogin, setRedirectToLogin] = useState(false);
-  const [castomErrors, setCastomErrors] = useState(false);
   const navigate = useNavigate();
-  const { container, formText, errrConfirm, errr, submitBtn, footerText, signIn } = Style;
+  const { user, error } = useSelector((state) => state.user);
+  const [redirectToLogin, setRedirectToLogin] = useState(false);
+  const [castomErrors, setCastomErrors] = useState('данные уже использовались или введены не корректно');
+  const { container, formText, errrConfirm, errr, submitBtn, footerText, signIn, errorUser } = Style;
 
   const {
     register,
@@ -72,25 +72,20 @@ const RegistrationForm = () => {
       return;
     }
 
-    try {
-      await dispatch(registerUser(data));
-      if (error) {
-        setRedirectToLogin(true);
-      }
-    } catch (error) {
-      setCastomErrors(true);
-    }
+    dispatch(registerUser(data));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    error !== null && setRedirectToLogin(true);
   };
-
   useEffect(() => {
     if (redirectToLogin) {
       return navigate('/auntification');
     }
-  }, [redirectToLogin, user, error, navigate]);
+  }, [redirectToLogin]);
+
   return (
     <div>
-      {error && <p>Логин или пароль уже использовались</p>}
       <form onSubmit={handleSubmit(handleOnSubmit)} className={container}>
+        {error && <p className={errorUser}>{castomErrors}</p>}
         <h2 className={formText}>Create new account</h2>
         {inputFields.map((field) => (
           <div key={field.name}>

@@ -13,16 +13,16 @@ const auentificationSlise = createSlice({
   initialState,
   reducers: {
     setLoading: (state) => {
-      state.isLoading = true;
+      state.loading = true;
       state.error = null;
     },
-    setError: (state, action) => {
-      state.isLoading = false;
+    setErrors: (state, action) => {
+      state.loading = false;
       state.error = action.payload;
     },
     setUser: (state, action) => {
       state.user = action.payload;
-      state.isLoading = false;
+      state.loading = false;
       state.error = null;
     },
     setToken: (state, action) => {
@@ -34,5 +34,5 @@ const auentificationSlise = createSlice({
   },
 });
 
-export const { setLoading, setError, setUser, setToken, setFlag } = auentificationSlise.actions;
+export const { setLoading, setErrors, setUser, setToken, setFlag } = auentificationSlise.actions;
 export default auentificationSlise.reducer;
