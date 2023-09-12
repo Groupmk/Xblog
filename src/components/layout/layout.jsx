@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
-import { useEffect, useState } from 'react';
-import { Link, Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { setSlug, slugAxiox } from '../redux/reducers/slugAxios/slugAxios';
@@ -12,8 +12,8 @@ import Style from './layout.module.scss';
 const Layout = () => {
   const dispatch = useDispatch();
   const { slug } = useParams();
-  const { articlesArray, loading, error, page, limit, offset } = useSelector((state) => state.article);
-  const { slugArray } = useSelector((state) => state.slug);
+  const { loading } = useSelector((state) => state.article);
+  useSelector((state) => state.slug);
   const { container } = Style;
 
   const location = useLocation();
@@ -29,20 +29,16 @@ const Layout = () => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === 'ArrowLeft') {
-        console.log('Key pressed:', event.key);
         if (location.pathname !== '/') {
           setTimeout(() => {
             localStorage.removeItem('slug');
           }, 0);
-          console.log('location.pathname:', location.pathname);
           dispatch(setSlug(''));
           navigate(-1);
         }
       }
       if (event.key === 'ArrowRight') {
         if (location.pathname !== '/') {
-          console.log('Key pressed:', event.key);
-          console.log(removeSlug);
           updateSlug(removeSlug);
         }
       }

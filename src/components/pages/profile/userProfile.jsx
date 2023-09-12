@@ -4,20 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-import { updateUser, storedUser } from '../../redux/actions/userActions/userActions';
-import { setProfile } from '../../redux/reducers/profile/profile';
+import { updateUser } from '../../redux/actions/userActions/userActions';
 import { clearUser } from '../../redux/reducers/userReduser/userReducer';
-import { artcleAxios } from '../../redux/reducers/articles/articles';
 
 import Style from './profile.module.scss';
 
 const UpdateUsers = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { updateProfile, profile } = useSelector((state) => state.profile);
-  const { user } = useSelector((state) => state.user);
-  const stored = storedUser;
-  const { container, formText, errrConfirm, errr, submitBtn, footerText, logOut } = Style;
+  const { user } = useSelector((state) => state.auentification);
+  const { container, formText, errr, submitBtn, logOut } = Style;
 
   const {
     register,

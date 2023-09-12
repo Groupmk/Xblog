@@ -11,7 +11,7 @@ import Style from './registration.module.scss';
 
 const RegistrationForm = () => {
   const dispatch = useDispatch();
-  const { user, error } = useSelector((state) => state.user);
+  const { user, error } = useSelector((state) => state.auentification);
   const [redirectToLogin, setRedirectToLogin] = useState(false);
   const [castomErrors, setCastomErrors] = useState(false);
   const navigate = useNavigate();

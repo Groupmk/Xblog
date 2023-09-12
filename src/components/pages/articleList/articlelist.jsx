@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Pagination } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import _ from 'lodash';
 
-import { setOffset, setPage, artcleAxios } from '../../redux/reducers/articles/articles';
+import { setOffset, setPage } from '../../redux/reducers/articles/articles';
 import ArticleContent from '../../articleContent/articleContent';
 import Loader from '../../ui/loading/spin';
 import Hello from '../../ui/helloMessage/helloMessage';
@@ -15,7 +15,7 @@ import Style from './articlelist.module.scss';
 const ArticleList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { articlesArray, limit, page, offset, loading, error } = useSelector((state) => state.article);
+  const { articlesArray, limit, page, loading, error } = useSelector((state) => state.article);
   const { articlesCount, articles } = articlesArray;
   const { user } = useSelector((state) => state.auentification);
 

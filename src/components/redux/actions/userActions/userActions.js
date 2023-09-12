@@ -4,7 +4,6 @@ import axios from 'axios';
 import { setLoading, setError, registerSuccess } from '../../reducers/userReduser/userReducer';
 import { setProfile } from '../../reducers/profile/profile';
 import { setUser } from '../../reducers/userAuentification/userAuentification';
-import { authorFilter } from '../../reducers/filterUserProfile/filterUserProfile';
 
 export const _Url = 'https://blog.kata.academy/api/';
 
@@ -26,15 +25,16 @@ export const authenticate = (userData) => async (dispatch) => {
     const user = response.data.user;
     localStorage.setItem('user', JSON.stringify(user));
     localStorage.setItem('mail', JSON.stringify(userData.email));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     dispatch(setUser(user));
     dispatch(setProfile(user));
     dispatch(userProfile(user.token));
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    storedUser = JSON.parse(localStorage.getItem('user'));
   } catch (error) {
     dispatch(setError(error.message));
   }
 };
-export const storedUser = JSON.parse(localStorage.getItem('user'));
+export let storedUser = JSON.parse(localStorage.getItem('user'));
 
 export const userProfile = (token) => async (dispatch) => {
   try {
@@ -44,13 +44,6 @@ export const userProfile = (token) => async (dispatch) => {
       },
     });
     const profile = response.data.user;
-    if (storedUser) {
-      storedUser.image = profile?.image;
-      storedUser.username = profile?.username;
-      storedUser.email = profile?.email;
-      storedUser.password = profile?.password;
-      localStorage.setItem('user', JSON.stringify(storedUser));
-    }
     dispatch(setProfile(profile));
   } catch (error) {
     dispatch(setError(error.message));
@@ -58,7 +51,8 @@ export const userProfile = (token) => async (dispatch) => {
 };
 
 export const updateUser = (userData) => async (dispatch) => {
-  const token = storedUser ? storedUser.token : '';
+  // const token = storedUser ? storedUser.token : '';
+  const storedUser = JSON.parse(localStorage.getItem('user'));
 
   try {
     const response = await axios.put(
@@ -66,23 +60,25 @@ export const updateUser = (userData) => async (dispatch) => {
       { user: userData },
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${storedUser.token}`,
         },
       }
     );
     const profile = response.data.user;
     if (storedUser) {
-      console.log(storedUser);
-      storedUser.image = profile?.image;
-      storedUser.username = profile?.username;
-      storedUser.email = profile?.email;
-      storedUser.password = profile?.password;
+      storedUser.image = profile.image || storedUser.image;
+      storedUser.username = profile.username || storedUser.username;
+      storedUser.email = profile.email || storedUser.email;
+      storedUser.password = profile.password || storedUser.password;
       localStorage.setItem('user', JSON.stringify(storedUser));
-      localStorage.setItem('mail', JSON.stringify(storedUser.email));
     }
     dispatch(setProfile(profile));
-    console.log(profile);
   } catch (error) {
     dispatch(setError(error.message));
   }
 };
+
+export const updateStoredUser = () => {
+  storedUser = JSON.parse(localStorage.getItem('user'));
+};
+updateStoredUser();

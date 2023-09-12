@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -9,6 +9,7 @@ import defaultUserImg from '../assets/img/Rectangle 1.png';
 import { setProfile } from '../redux/reducers/profile/profile';
 import { setSlug } from '../redux/reducers/slugAxios/slugAxios';
 import { setAuthor } from '../redux/reducers/filterUserProfile/filterUserProfile';
+import { storedUser, updateStoredUser } from '../redux/actions/userActions/userActions';
 
 import Style from './header.module.scss';
 
@@ -17,7 +18,6 @@ const Header = () => {
 
   const {
     container,
-    SignUp,
     SignUpBtn,
     X,
     XContainer,
@@ -30,9 +30,8 @@ const Header = () => {
     btnContainer,
   } = Style;
 
-  const { updateProfile, profile } = useSelector((state) => state.profile);
+  const { updateProfile } = useSelector((state) => state.profile);
   const { user } = useSelector((state) => state.auentification);
-  const { post } = useSelector((state) => state.postCreate);
   const [jsxCode, setJsxCode] = useState(null);
   const [localStorageUpdated, setLocalStorageUpdated] = useState(false);
 
@@ -46,12 +45,14 @@ const Header = () => {
     localStorage.removeItem('user');
     setLocalStorageUpdated(false);
     dispatch(setProfile(null));
+    dispatch(setUser(null));
   };
 
   useEffect(() => {
-    const storedUserData = JSON.parse(localStorage.getItem('user'));
-    if (storedUserData) {
-      dispatch(setUser(storedUserData));
+    updateStoredUser();
+    if (storedUser) {
+      console.log(storedUser);
+      dispatch(setUser(storedUser));
       setLocalStorageUpdated(true);
     } else {
       setLocalStorageUpdated(false);
@@ -70,8 +71,8 @@ const Header = () => {
     if (localStorageUpdated) {
       setJsxCode(
         <div className={userInfo}>
-          {updateProfile?.image || user?.image ? (
-            <img src={updateProfile?.image || user?.image} alt="user" className={userImg} />
+          {updateProfile?.image && user?.image ? (
+            <img src={updateProfile?.image && user?.image} alt="user" className={userImg} />
           ) : (
             <img src={defaultUserImg} alt="defaultUserImg" className={userImg} />
           )}

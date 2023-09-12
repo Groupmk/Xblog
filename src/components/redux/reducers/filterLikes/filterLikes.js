@@ -4,9 +4,7 @@ import axios from 'axios';
 
 import { _Url, storedUser } from '../../actions/userActions/userActions';
 
-export const filterLikes = createAsyncThunk('article/filterLikes', async () => {
-  const usernamStored = JSON.parse(localStorage.getItem('user'));
-  const username = usernamStored?.username;
+export const filterLikes = createAsyncThunk('article/filterLikes', async (username) => {
   try {
     const response = await axios.get(`${_Url}articles?favorited=${username}`);
     return response.data;

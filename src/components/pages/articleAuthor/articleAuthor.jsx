@@ -3,14 +3,13 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { Button, message, Popconfirm } from 'antd';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Button, Popconfirm } from 'antd';
 
-import { setSlug, setSlugArray } from '../../redux/reducers/slugAxios/slugAxios';
+import { setSlug } from '../../redux/reducers/slugAxios/slugAxios';
 import { storedUser } from '../../redux/actions/userActions/userActions';
 import { deletePost } from '../../redux/reducers/deletePost/deletePost';
 import { storedSlug } from '../../local-store/local-store';
-import { artcleAxios } from '../../redux/reducers/articles/articles';
 import { setPost } from '../../redux/reducers/createArticle/createArticle';
 import { authorFilter } from '../../redux/reducers/filterUserProfile/filterUserProfile';
 
@@ -19,22 +18,11 @@ import Style from './author.module.scss';
 const ArticleAuthor = ({ article, createdAt }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const { slug, slugArray } = useSelector((state) => state.slug);
-  const [stored, setStored] = useState(storedUser);
+  const [stored] = useState(storedUser);
   const [jsxCode, setJsxCode] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const {
-    container,
-    username,
-    imageAuthor,
-    articleData,
-    userNameContaier,
-    edit,
-    deleteBtn,
-    btnContainer,
-    modal,
-    modalContent,
-  } = Style;
+  const { container, username, imageAuthor, articleData, userNameContaier, edit, btnContainer, modal, modalContent } =
+    Style;
 
   const closeDeleteModal = () => {
     setIsDeleteModalOpen(false);
@@ -64,10 +52,7 @@ const ArticleAuthor = ({ article, createdAt }) => {
 
   const firstArticle = articles && articles.length > 0 ? articles[0] : {};
 
-  console.log(firstArticle);
-
   useEffect(() => {
-    const storedSlug = localStorage.getItem('slug');
     if (slug && firstArticle && firstArticle.slug === article.slug) {
       if (stored && stored?.username === article.author?.username) {
         const popconfirm = (

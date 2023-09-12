@@ -4,28 +4,26 @@ import axios from 'axios';
 
 import { _Url, storedUser } from '../../actions/userActions/userActions';
 
-export const toggleLikeOnServer = createAsyncThunk(
-  'favorite/toggleLikeOnServer',
-  async ({ slug, isLiked }, thunkAPI) => {
-    const tokenStored = JSON.parse(localStorage.getItem('user'));
-    const token = tokenStored?.token;
-    try {
-      const response = await axios.post(
-        `${_Url}articles/${slug}/favorite`,
-        { favorite: isLiked },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return response.data;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
+export const toggleLikeOnServer = createAsyncThunk('favorite/toggleLikeOnServer', async ({ slug, isLiked }, _) => {
+  const token = storedUser?.token;
+  console.log(token);
+  try {
+    console.log(isLiked);
+    const response = await axios.post(
+      `${_Url}articles/${slug}/favorite`,
+      { favorite: isLiked },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
-);
+});
 
 const initialState = {
   likes: null,

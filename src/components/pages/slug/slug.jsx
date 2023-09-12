@@ -3,10 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { slugAxiox, setSlug } from '../../redux/reducers/slugAxios/slugAxios';
-import { storedUser } from '../../redux/actions/userActions/userActions';
-import { deletePost, setDeleteData } from '../../redux/reducers/deletePost/deletePost';
-import ArticleAuthor from '../articleAuthor/articleAuthor';
+import { slugAxiox } from '../../redux/reducers/slugAxios/slugAxios';
 import ArticleContent from '../../articleContent/articleContent';
 
 import Style from './slug.module.scss';

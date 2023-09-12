@@ -6,14 +6,13 @@ import { useForm } from 'react-hook-form';
 
 import { setPost, postAxios } from '../../redux/reducers/createArticle/createArticle';
 import { setEdit, editPost } from '../../redux/reducers/editArticle/editArticle';
-import { authorFilter, setAuthor } from '../../redux/reducers/filterUserProfile/filterUserProfile';
+import { setAuthor } from '../../redux/reducers/filterUserProfile/filterUserProfile';
 
 import Style from './createArticle.module.scss';
 
 const CreateArticle = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { post } = useSelector((state) => state.postCreate);
   const { slug } = useSelector((state) => state.slug);
   const { author } = useSelector((state) => state.author);
   const articles = author?.articles;
@@ -26,7 +25,6 @@ const CreateArticle = () => {
     body: firstArticle?.body || '',
   });
 
-  console.log(articleData);
   const [tags, setTags] = useState([]);
   const [newTag, setNewTag] = useState('');
 

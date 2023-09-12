@@ -1,12 +1,9 @@
-/* eslint-disable import/no-unresolved */
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import { authenticate } from '../../redux/actions/userActions/userActions';
-import { authorFilter } from '../../redux/reducers/filterUserProfile/filterUserProfile';
 import { setFlag } from '../../redux/reducers/userAuentification/userAuentification';
 
 import Style from './aunification.module.scss';
@@ -14,11 +11,8 @@ import Style from './aunification.module.scss';
 const Authentication = () => {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.user);
-  const [redirectToLogin, setRedirectToLogin] = useState(false);
   const navigate = useNavigate();
-  const { container, formText, submitBtn, footerText, signUp, errorStyle } = Style;
-  const { user, flag } = useSelector((state) => state.auentification);
-
+  const { container, formText, submitBtn, footerText, signUp } = Style;
   const [articleData, setArticleData] = useState({
     email: '',
   });
@@ -37,12 +31,10 @@ const Authentication = () => {
     fetchStoredEmail();
   }, []);
 
-  console.log(articleData);
-
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { isValid },
     reset,
   } = useForm({
     mode: 'onBlur',

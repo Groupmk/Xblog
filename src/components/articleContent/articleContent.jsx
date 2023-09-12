@@ -6,27 +6,22 @@ import ReactMarkdown from 'react-markdown';
 
 import heart_1 from '../assets/img/heart 1.svg';
 import heart_2 from '../assets/img/Heart_corazón 1.svg';
-import { setSlug, slugAxiox } from '../redux/reducers/slugAxios/slugAxios';
+import { setSlug } from '../redux/reducers/slugAxios/slugAxios';
 import { toggleLikeOnServer } from '../redux/reducers/favoritCount/favoritCount';
 import { storedUser } from '../redux/actions/userActions/userActions';
 import { filterLikes } from '../redux/reducers/filterLikes/filterLikes';
 import ArticleAuthor from '../pages/articleAuthor/articleAuthor';
 import { authorFilter } from '../redux/reducers/filterUserProfile/filterUserProfile';
 import Loader from '../ui/loading/spin';
-import Hello from '../ui/helloMessage/helloMessage';
 
 import Style from './articleContent.module.scss';
 
 const ArticleContent = (propse) => {
-  const { currentSlug, article, loading, error } = propse;
+  const { currentSlug, article } = propse;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { likes } = useSelector((state) => state.likes);
-  const { slug } = useSelector((state) => state.slug);
   const { filterLikesArray } = useSelector((state) => state.filterLikes);
-
-  const [stored, setStored] = useState(storedUser);
-
   const [likeClicked, setLikeClicked] = useState(false);
   const { user } = useSelector((state) => state.auentification);
 
@@ -37,7 +32,6 @@ const ArticleContent = (propse) => {
     tagContainer,
     authorContainer,
     articleBody,
-    articleData,
     titleText,
     likeBtn,
     likeBtnContainer,
@@ -46,7 +40,7 @@ const ArticleContent = (propse) => {
   } = Style;
 
   useEffect(() => {
-    dispatch(filterLikes());
+    dispatch(filterLikes(user?.username));
   }, [likes, article, dispatch, user]);
 
   const onClickArtickle = (slug) => {
@@ -61,12 +55,19 @@ const ArticleContent = (propse) => {
       setLikeClicked(likeClicked);
       return null;
     }
-    dispatch(toggleLikeOnServer({ slug: slug, favoritesCount: likes })).then(() => {});
+
+    const favoritesLike = typeof likes === 'number' ? likes : parseInt(likes, 10);
+
+    if (isNaN(favoritesLike)) {
+      return console.log('error');
+    }
+    console.log(slug, likes);
+    dispatch(toggleLikeOnServer({ slug: slug, favoritesCount: favoritesLike })).then(() => {});
   };
+
   const likedFilter = (article) => {
     if (filterLikesArray && filterLikesArray.articles) {
       const isLiked = filterLikesArray.articles.some((item) => item.slug === article.slug);
-      console.log(isLiked);
       if (isLiked) {
         return <img src={heart_2} alt="heart" />;
       } else {
@@ -83,10 +84,6 @@ const ArticleContent = (propse) => {
     }
     return description;
   };
-
-  // useEffect(() => {
-  //   dispatch(slugAxiox({ slug: currentSlug }));
-  // }, [dispatch, currentSlug, slug, storedSlug]);
 
   if (!article) {
     return <Loader />;
