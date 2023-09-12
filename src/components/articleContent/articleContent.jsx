@@ -66,6 +66,7 @@ const ArticleContent = (propse) => {
   const likedFilter = (article) => {
     if (filterLikesArray && filterLikesArray.articles) {
       const isLiked = filterLikesArray.articles.some((item) => item.slug === article.slug);
+      console.log(isLiked);
       if (isLiked) {
         return <img src={heart_2} alt="heart" />;
       } else {

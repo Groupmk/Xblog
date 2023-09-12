@@ -1,10 +1,12 @@
+/* eslint-disable no-unused-vars */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 import { _Url, storedUser } from '../../actions/userActions/userActions';
 
 export const filterLikes = createAsyncThunk('article/filterLikes', async () => {
-  const { username } = storedUser;
+  const usernamStored = JSON.parse(localStorage.getItem('user'));
+  const username = usernamStored?.username;
   try {
     const response = await axios.get(`${_Url}articles?favorited=${username}`);
     return response.data;

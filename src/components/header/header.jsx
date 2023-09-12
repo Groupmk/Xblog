@@ -92,24 +92,24 @@ const Header = () => {
       </div>
       {updateProfile?.username || localStorageUpdated ? (
         <div className={userContainer}>
-          <button onClick={onClickCreate} className={createArticle}>
-            <Link to={'/new-article'}>Create Article</Link>
-          </button>
-          <button>
-            <Link to={'/profile'}>{jsxCode}</Link>
-          </button>
+          <Link to={'/new-article'} onClick={onClickCreate} className={createArticle}>
+            Create Article
+          </Link>
+
+          <Link to={'/profile'}>{jsxCode}</Link>
+
           <button className={logOut} onClick={setClearUser}>
             Log Out
           </button>
         </div>
       ) : (
         <div className={btnContainer}>
-          <button className={SignIn}>
-            <Link to={'/auntification'}>Sign In</Link>
-          </button>
-          <button className={SignUpBtn}>
-            <Link to="/registration">Sign Up</Link>
-          </button>
+          <Link to={'/auntification'} className={SignIn}>
+            Sign In
+          </Link>
+          <Link to="/registration" className={SignUpBtn}>
+            Sign Up
+          </Link>
         </div>
       )}
     </div>

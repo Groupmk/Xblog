@@ -7,7 +7,8 @@ import { _Url, storedUser } from '../../actions/userActions/userActions';
 export const toggleLikeOnServer = createAsyncThunk(
   'favorite/toggleLikeOnServer',
   async ({ slug, isLiked }, thunkAPI) => {
-    const token = JSON.parse(localStorage.getItem('user.token'));
+    const tokenStored = JSON.parse(localStorage.getItem('user'));
+    const token = tokenStored?.token;
     try {
       const response = await axios.post(
         `${_Url}articles/${slug}/favorite`,
