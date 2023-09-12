@@ -5,7 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import { registerUser } from '../../redux/actions/userActions/userActions.js';
-import { registerSuccess } from '../../redux/reducers/userReduser/userReducer';
+import { registerSuccess, setUser } from '../../redux/reducers/userReduser/userReducer';
 
 import Style from './registration.module.scss';
 
@@ -71,16 +71,21 @@ const RegistrationForm = () => {
     if (password !== confirmPassword) {
       return;
     }
-
+    setRedirectToLogin(true);
     dispatch(registerUser(data));
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    error !== null && setRedirectToLogin(true);
+    if (error !== null) {
+      setRedirectToLogin(true);
+    } else {
+      setRedirectToLogin(false);
+    }
   };
   useEffect(() => {
     if (redirectToLogin) {
       return navigate('/auntification');
     }
   }, [redirectToLogin]);
+  console.log(redirectToLogin);
 
   return (
     <div>

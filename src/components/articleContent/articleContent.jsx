@@ -41,7 +41,7 @@ const ArticleContent = (propse) => {
 
   useEffect(() => {
     dispatch(filterLikes(user?.username));
-  }, [likes, article, dispatch, user]);
+  }, [likes, user]);
 
   const onClickArtickle = (slug) => {
     localStorage.setItem('slug', slug);
@@ -61,7 +61,6 @@ const ArticleContent = (propse) => {
     if (isNaN(favoritesLike)) {
       return console.log('error');
     }
-    console.log(slug, likes);
     dispatch(toggleLikeOnServer({ slug: slug, favoritesCount: favoritesLike })).then(() => {});
   };
 

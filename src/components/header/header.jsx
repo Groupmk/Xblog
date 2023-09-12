@@ -51,7 +51,6 @@ const Header = () => {
   useEffect(() => {
     updateStoredUser();
     if (storedUser) {
-      console.log(storedUser);
       dispatch(setUser(storedUser));
       setLocalStorageUpdated(true);
     } else {
@@ -71,8 +70,8 @@ const Header = () => {
     if (localStorageUpdated) {
       setJsxCode(
         <div className={userInfo}>
-          {updateProfile?.image && user?.image ? (
-            <img src={updateProfile?.image && user?.image} alt="user" className={userImg} />
+          {storedUser?.image && user?.image ? (
+            <img src={storedUser?.image && user?.image} alt="user" className={userImg} />
           ) : (
             <img src={defaultUserImg} alt="defaultUserImg" className={userImg} />
           )}

@@ -12,7 +12,6 @@ import ArticleList from '../pages/articleList/articlelist';
 import CreateArticle from '../pages/createArticle/createArticle';
 import { userProfile, storedUser } from '../redux/actions/userActions/userActions';
 import Slug from '../pages/slug/slug';
-import { MyContextProvider } from '../context/userContext';
 
 function App() {
   const dispatch = useDispatch();
@@ -21,8 +20,6 @@ function App() {
   const { post } = useSelector((state) => state.postCreate);
   const { edit } = useSelector((state) => state.edit);
   const { user } = useSelector((state) => state.auentification);
-  console.log(user);
-  console.log(storedUser);
 
   useEffect(() => {
     localStorage.removeItem('slug');
@@ -39,24 +36,22 @@ function App() {
   }, [user]);
 
   return (
-    <MyContextProvider>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route path="registration" element={<RegistrationForm />} />
-          <Route path="auntification" element={<Auntification />} />
-          <Route path="articles/:slug" element={<Slug />} />
-          <Route path="article/:page" element={<ArticleList />} />
-          <Route path="profile" element={user?.username ? <UpdateUsers /> : <Auntification to="/login" />} />
-          <Route path="new-article" element={user?.username ? <CreateArticle /> : <Auntification to="/login" />} />
-          <Route
-            path="/articles/:slug/edit"
-            element={user?.username ? <CreateArticle /> : <Auntification to="/login" />}
-          />
-          <Route path="create/:slug" element={user?.username ? <CreateArticle /> : <Auntification to="/login" />} />
-          <Route index element={<ArticleList />} />
-        </Route>
-      </Routes>
-    </MyContextProvider>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route path="registration" element={<RegistrationForm />} />
+        <Route path="auntification" element={<Auntification />} />
+        <Route path="articles/:slug" element={<Slug />} />
+        <Route path="article/:page" element={<ArticleList />} />
+        <Route path="profile" element={user?.username ? <UpdateUsers /> : <Auntification to="/login" />} />
+        <Route path="new-article" element={user?.username ? <CreateArticle /> : <Auntification to="/login" />} />
+        <Route
+          path="/articles/:slug/edit"
+          element={user?.username ? <CreateArticle /> : <Auntification to="/login" />}
+        />
+        <Route path="create/:slug" element={user?.username ? <CreateArticle /> : <Auntification to="/login" />} />
+        <Route index element={<ArticleList />} />
+      </Route>
+    </Routes>
   );
 }
 

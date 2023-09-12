@@ -79,7 +79,7 @@ const Authentication = () => {
               {...register(name)}
               placeholder={placeholder}
               className={Style[name]}
-              value={articleData[name]}
+              value={articleData[name] || ''}
               onChange={(e) =>
                 setArticleData({
                   ...articleData,
