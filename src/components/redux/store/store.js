@@ -12,6 +12,7 @@ import editSlise from '../reducers/editArticle/editArticle';
 import deleteSlise from '../reducers/deletePost/deletePost';
 import filterLikesSlice from '../reducers/filterLikes/filterLikes';
 import authorFilterSlice from '../reducers/filterUserProfile/filterUserProfile';
+import unFavoriteSlice from '../reducers/unFavoriteLikes/unFavoriteLikes';
 
 const loggerMiddleware = (store) => (next) => (action) => {
   const result = next(action);
@@ -27,6 +28,7 @@ export const store = configureStore({
     article: articleSlice,
     slug: slugSlice,
     likes: favoriteSlice,
+    disLike: unFavoriteSlice,
     postCreate: postSlice,
     edit: editSlise,
     deletePost: deleteSlise,

@@ -17,6 +17,7 @@ function App() {
   const dispatch = useDispatch();
   const { page } = useSelector((state) => state.article);
   const { likes } = useSelector((state) => state.likes);
+  const { disLikes } = useSelector((state) => state.disLike);
   const { post } = useSelector((state) => state.postCreate);
   const { edit } = useSelector((state) => state.edit);
   const { user } = useSelector((state) => state.auentification);
@@ -29,7 +30,7 @@ function App() {
     return () => {
       clearTimeout(fnTimeout);
     };
-  }, [page, likes, post, edit, user]);
+  }, [page, likes, post, edit, user, disLikes]);
 
   useEffect(() => {
     userProfile();

@@ -12,6 +12,7 @@ import { storedUser } from '../redux/actions/userActions/userActions';
 import { filterLikes } from '../redux/reducers/filterLikes/filterLikes';
 import ArticleAuthor from '../pages/articleAuthor/articleAuthor';
 import { authorFilter } from '../redux/reducers/filterUserProfile/filterUserProfile';
+import { unToggleLikeOnServer } from '../redux/reducers/unFavoriteLikes/unFavoriteLikes';
 import Loader from '../ui/loading/spin';
 
 import Style from './articleContent.module.scss';
@@ -21,6 +22,7 @@ const ArticleContent = (propse) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { likes } = useSelector((state) => state.likes);
+  const { disLikes } = useSelector((state) => state.disLike);
   const { filterLikesArray } = useSelector((state) => state.filterLikes);
   const [likeClicked, setLikeClicked] = useState(false);
   const { user } = useSelector((state) => state.auentification);
@@ -41,7 +43,7 @@ const ArticleContent = (propse) => {
 
   useEffect(() => {
     dispatch(filterLikes(user?.username));
-  }, [likes, user]);
+  }, [likes, user, disLikes]);
 
   const onClickArtickle = (slug) => {
     localStorage.setItem('slug', slug);
@@ -52,9 +54,9 @@ const ArticleContent = (propse) => {
 
   const onLike = (slug, likes) => {
     if (!user?.username) {
-      setLikeClicked(likeClicked);
       return null;
     }
+    setLikeClicked(true);
 
     const favoritesLike = typeof likes === 'number' ? likes : parseInt(likes, 10);
 
@@ -62,6 +64,14 @@ const ArticleContent = (propse) => {
       return console.log('error');
     }
     dispatch(toggleLikeOnServer({ slug: slug, favoritesCount: favoritesLike })).then(() => {});
+  };
+
+  const onDisLike = (slug, likes) => {
+    if (!user?.username) {
+      return null;
+    }
+    setLikeClicked(false);
+    dispatch(unToggleLikeOnServer({ slug: slug, favoritesCount: likes })).then(() => {});
   };
 
   const likedFilter = (article) => {
@@ -78,7 +88,7 @@ const ArticleContent = (propse) => {
   };
 
   const truncateDescription = (description, maxLength) => {
-    if (description.length > maxLength) {
+    if (description?.length > maxLength) {
       return description.slice(0, maxLength) + '...';
     }
     return description;
@@ -87,6 +97,7 @@ const ArticleContent = (propse) => {
   if (!article) {
     return <Loader />;
   }
+
   return (
     <div>
       <div className={articleListInner}>
@@ -96,7 +107,14 @@ const ArticleContent = (propse) => {
               <div className={titleText}> {article.title} </div>
             </button>
             <div className={likeBtnContainer}>
-              <button onClick={() => onLike(article.slug, article.favoritesCount)} className={likeBtn}>
+              <button
+                onClick={() => {
+                  !likeClicked
+                    ? onLike(article.slug, article.favoritesCount)
+                    : onDisLike(article.slug, article.favoritesCount);
+                }}
+                className={likeBtn}
+              >
                 {likedFilter(article)}
               </button>
               {article.favoritesCount}
