@@ -43,7 +43,7 @@ const ArticleContent = (propse) => {
 
   useEffect(() => {
     dispatch(filterLikes(user?.username));
-  }, [likes, user, disLikes]);
+  }, [likes, disLikes]);
 
   const onClickArtickle = (slug) => {
     localStorage.setItem('slug', slug);

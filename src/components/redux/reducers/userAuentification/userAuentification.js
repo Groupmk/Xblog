@@ -12,7 +12,7 @@ const auentificationSlise = createSlice({
   name: 'log',
   initialState,
   reducers: {
-    setLoading: (state) => {
+    setLoad: (state) => {
       state.loading = true;
       state.error = null;
     },
@@ -34,5 +34,5 @@ const auentificationSlise = createSlice({
   },
 });
 
-export const { setLoading, setErrors, setUser, setToken, setFlag } = auentificationSlise.actions;
+export const { setLoad, setErrors, setUser, setToken, setFlag } = auentificationSlise.actions;
 export default auentificationSlise.reducer;

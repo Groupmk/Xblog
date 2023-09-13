@@ -6,13 +6,14 @@ import { useForm } from 'react-hook-form';
 
 import { authenticate } from '../../redux/actions/userActions/userActions';
 import { setFlag } from '../../redux/reducers/userAuentification/userAuentification';
+import Loader from '../../ui/loading/spin';
 
 import Style from './aunification.module.scss';
 
 const Authentication = () => {
   const dispatch = useDispatch();
   const { error } = useSelector((state) => state.auentification);
-  const { user } = useSelector((state) => state.auentification);
+  const { user, loading } = useSelector((state) => state.auentification);
   const navigate = useNavigate();
   const { container, formText, submitBtn, footerText, signUp, errr } = Style;
   const [articleData, setArticleData] = useState({
@@ -63,6 +64,8 @@ const Authentication = () => {
     }
   }, [user]);
 
+  console.log(loading);
+
   return (
     <div>
       <form onSubmit={handleSubmit(handleOneSubmit)} className={container}>
@@ -89,9 +92,13 @@ const Authentication = () => {
             />
           </label>
         ))}
-        <button type="submit" disabled={!isValid} className={submitBtn}>
-          Login
-        </button>
+        {loading ? (
+          <Loader />
+        ) : (
+          <button type="submit" disabled={!isValid} className={submitBtn}>
+            Login
+          </button>
+        )}
         <p className={footerText}>
           Don’t have an account?{' '}
           <Link to="/registration" className={signUp}>
