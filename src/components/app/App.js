@@ -35,6 +35,15 @@ function App() {
     userProfile();
   }, [user]);
 
+  const authenticatedRoutes = (
+    <>
+      <Route path="profile" element={<UpdateUsers />} />
+      <Route path="new-article" element={<CreateArticle />} />
+      <Route path="/articles/:slug/edit" element={<CreateArticle />} />
+      <Route path="create/:slug" element={<CreateArticle />} />
+    </>
+  );
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -42,13 +51,16 @@ function App() {
         <Route path="auntification" element={<Auntification />} />
         <Route path="articles/:slug" element={<Slug />} />
         <Route path="article/:page" element={<ArticleList />} />
-        <Route path="profile" element={user?.username ? <UpdateUsers /> : <Auntification to="/login" />} />
-        <Route path="new-article" element={user?.username ? <CreateArticle /> : <Auntification to="/login" />} />
-        <Route
-          path="/articles/:slug/edit"
-          element={user?.username ? <CreateArticle /> : <Auntification to="/login" />}
-        />
-        <Route path="create/:slug" element={user?.username ? <CreateArticle /> : <Auntification to="/login" />} />
+        {user?.username ? (
+          authenticatedRoutes
+        ) : (
+          <>
+            <Route path="profile" element={<Auntification to="/login" />} />
+            <Route path="new-article" element={<Auntification to="/login" />} />
+            <Route path="/articles/:slug/edit" element={<Auntification to="/login" />} />
+            <Route path="create/:slug" element={<Auntification to="/login" />} />
+          </>
+        )}
         <Route index element={<ArticleList />} />
       </Route>
     </Routes>
