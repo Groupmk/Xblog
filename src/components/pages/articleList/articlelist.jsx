@@ -34,7 +34,7 @@ const ArticleList = () => {
     return <Loader />;
   }
 
-  const totalCount = Math.ceil(articlesCount / articles.length);
+  // const totalCount = Math.ceil(articlesCount / 5);
 
   return (
     <div className={container}>
@@ -44,7 +44,13 @@ const ArticleList = () => {
           <ArticleContent article={article} loading={loading} error={error} />
         </div>
       ))}
-      <Pagination defaultCurrent={1} current={page} total={totalCount} onChange={hendleOnPageChange} />
+      <Pagination
+        defaultCurrent={1}
+        current={page}
+        total={articlesCount}
+        onChange={hendleOnPageChange}
+        showSizeChanger={false}
+      />
     </div>
   );
 };
