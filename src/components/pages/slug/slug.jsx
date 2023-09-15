@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { slugAxiox } from '../../redux/reducers/slugAxios/slugAxios';
 import ArticleContent from '../../articleContent/articleContent';
@@ -11,7 +11,8 @@ import Style from './slug.module.scss';
 const Slug = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { slugArray, slug } = useSelector((state) => state.slug);
+  const { slug } = useParams();
+  const { slugArray } = useSelector((state) => state.slug);
   const { article } = slugArray;
   const { container } = Style;
 

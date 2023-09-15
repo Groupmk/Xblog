@@ -48,14 +48,24 @@ const Authentication = () => {
     { name: 'email', type: 'email', placeholder: 'Email', className: 'email', label: 'Email address' },
     { name: 'password', type: 'password', placeholder: 'Пароль', className: 'password', label: 'Password' },
   ];
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOneSubmit = async () => {
+    if (isLoading) {
+      return;
+    }
+    setIsLoading(true);
     localStorage.setItem('mail', JSON.stringify(articleData.email));
-    dispatch(authenticate({ ...articleData }));
-    dispatch(setFlag(true));
-    reset();
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    error !== null && setRedirectToLogin(true);
+    try {
+      dispatch(authenticate({ ...articleData }));
+      dispatch(setFlag(true));
+      reset();
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -92,13 +102,10 @@ const Authentication = () => {
             />
           </label>
         ))}
-        {loading ? (
-          <Loader />
-        ) : (
-          <button type="submit" disabled={!isValid} className={submitBtn}>
-            Login
-          </button>
-        )}
+        <button type="submit" disabled={!isValid || isLoading} className={submitBtn}>
+          {isLoading ? 'Loading...' : 'Login'}
+        </button>
+
         <p className={footerText}>
           Don’t have an account?{' '}
           <Link to="/registration" className={signUp}>
